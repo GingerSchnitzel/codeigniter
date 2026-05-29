@@ -84,3 +84,7 @@ $routes->get('/dashboard', function () {
 
     return 'User dashboard';
 });
+
+$routes->get('/patients', 'PatientController::index');
+
+$routes->get('/logout', 'Auth::logout');
