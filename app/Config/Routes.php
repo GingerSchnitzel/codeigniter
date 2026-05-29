@@ -54,3 +54,33 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
 if (file_exists(APPPATH . 'Config/' . ENVIRONMENT . '/Routes.php')) {
     require APPPATH . 'Config/' . ENVIRONMENT . '/Routes.php';
 }
+
+$routes->get('/login', 'Auth::login');
+
+$routes->post('/authenticate', 'Auth::authenticate');
+
+$routes->get('/logout', 'Auth::logout');
+
+//Protects admin page using session checks
+$routes->get('/admin', function () {
+
+    if (!session()->get('logged_in')) {
+        return redirect()->to('/login');
+    }
+
+    if (session()->get('role') !== 'admin') {
+        return 'Access denied';
+    }
+
+    return 'Admin page';
+});
+
+//Protects user dashboard page using session checks
+$routes->get('/dashboard', function () {
+
+    if (!session()->get('logged_in')) {
+        return redirect()->to('/login');
+    }
+
+    return 'User dashboard';
+});
